@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+     <!-- Required meta tags -->
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+     <!-- Bootstrap CSS -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+     <title>Providers</title>
+</head>
+
+<body>
+     <div class="container">
+          <div class="container-fluid">
+               <table class="table">
+                    <thead class="thead-dark">
+                         <tr>
+                              <th scope="col">id</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Surname</th>
+                              <th scope="col">DNI</th>
+                              <th scope="col">Photo</th>
+                              <th scope="col">
+                                   <div class="btn-group">
+                                        <button type="button" onclick="getProviders()" class="btn btn-primary"
+                                             data-toggle="modal" data-target="#getProviders">
+                                             Get All
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-toggle="modal"
+                                             data-target="#addProvider">
+                                             New Provider
+                                        </button>
+                                   </div>
+                              </th>
+                         </tr>
+                    </thead>
+                    <tbody class="tbody">
+
+                    </tbody>
+               </table>
+          </div>
+     </div>
+     <!-- MODAL ADD PROVIDER -->
+     <div class="modal fade" id="addProvider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLabel">New Provider</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                    <form action="" id="addForm" enctype="multipart/form-data" method="POST">
+                         <div class="modal-body">
+                              <div class="form-group">
+                                   <label for="name">Name</label>
+                                   <input type="name" name="name" class="form-control" id="name"
+                                        aria-describedby="nameHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="surname">SurName</label>
+                                   <input type="surname" name="surname" class="form-control" id="surname"
+                                        aria-describedby="surnameHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="dni">DNI</label>
+                                   <input type="dni" name="dni" class="form-control" id="dni"
+                                        aria-describedby="dniHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="image">Image</label>
+                                   <input type="file" name="image" class="form-control" id="image"
+                                        aria-describedby="imageHelp">
+                              </div>
+
+                         </div>
+                         <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Add Provider</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+     <!-- MODAL EDIT PROVIDER -->
+     <div class="modal fade" id="editProvider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLabel">Edit Provider</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                    <form action="" id="editForm" enctype="multipart/form-data">
+                         <div class="modal-body">
+                              <input type="hidden" name="id" class="form-control" id="id" aria-describedby="idHelp">
+                              <div class="form-group">
+                                   <label for="name">Name</label>
+                                   <input type="name" name="name" class="form-control" id="name"
+                                        aria-describedby="nameHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="surname">SurName</label>
+                                   <input type="surname" name="surname" class="form-control" id="surname"
+                                        aria-describedby="surnameHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="dni">DNI</label>
+                                   <input type="dni" name="dni" class="form-control" id="dni"
+                                        aria-describedby="dniHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="image">Image</label>
+                                   <input type="file" name="image" class="form-control" id="image"
+                                        aria-describedby="imageHelp">
+                              </div>
+                               <input type="hidden" name="path" class="form-control" id="path"
+                                    aria-describedby="pathHelp">
+                         </div>
+                         <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Edit Provider</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+     <script>
+          const addForm = document.querySelector('#addForm');
+          const editForm = document.querySelector("#editForm");
+          // ADD PROVIDER
+          addForm.addEventListener('submit', (e) => {
+               e.preventDefault();
+               const formData = new FormData(e.currentTarget);
+               // console.log(formData);
+               // debugger;
+               
+               // const filePhoto = URL.createObjectURL(formData.get('photo'));
+               fetch("http://localhost:3000/api/providers", {
+                         method: "POST",
+                         body: formData
+                    })
+                    .then(response => {
+                         return response.json();
+                    })
+                    .then(data => {
+                         console.log(data);
+                         const addBody = document.querySelector('#addForm .modal-body');
+                         if (data.message) {
+                              addBody.insertAdjacentHTML('beforeend', `<div class="alert alert-danger" id="addError">Por favor complete todos los campos:
+                              </div>`)
+                              // const addError = document.querySelector("#addError ul");
+                              // for (const key in data.message.errors) {
+                              //      addError.insertAdjacentHTML('beforeend', `
+                              //      <li>${data.message.errors[key].message.replace('Path', 'Field')}</li>
+                              // `)
+                              // }
+                         } else {
+                              document.querySelector("#addForm #name").value = "";
+                              document.querySelector("#addForm #surname").value = "";
+                              document.querySelector("#addForm #dni").value = "";
+                              document.querySelector("#addForm #image").value = "";
+                              getProviders();
+                              $('#addProvider').modal('hide');
+                         }
+                    });
+          });
+
+          //GET PROVIDERS
+          function getProviders() {
+               const tbody = document.querySelector(".tbody");
+               tbody.innerHTML = "";
+               fetch("http://localhost:3000/api/providers/")
+                    .then(response => {
+                         return response.json();
+                    })
+                    .then(data => {
+                         console.log(data);
+                         const cant = data.length;
+
+                         for (let index = 0; index < cant; index++) {
+                              const id = data[index]._id;
+                              const name = data[index].name;
+                              const surname = data[index].surname;
+                              const dni = data[index].dni;
+                              const path = data[index].path;
+                              const image = data[index].url;
+
+                              tbody.insertAdjacentHTML('beforeend', `<tr>
+                                                                      <th scope="row">${index+1}</th>
+                                                                      <td>${name}</td>
+                                                                      <td>${surname}</td>
+                                                                      <td>${dni}</td>
+                                                                       <td class="col-2"><img src="${image}"
+                                                                                 alt="" class="img-fluid">
+                                                                       </td>
+
+                                                                      <td> <div class="btn-group btn-sm">
+                                        <button type="button" onclick="editProvider('${id}', '${name}', '${surname}', '${dni}', '${path}')" class="btn btn-success btn-sm" data-toggle="modal" data-target="#editProvider">
+                                            Edit 
+                                        </button>
+
+                                        <button type="button" onclick="deleteProvider('${id}')" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteProvider">
+                                             Delete 
+                                        </button>
+                                   </div>
+
+                                   </td>
+                                                                 </tr>`);
+                         }
+                    });
+          };
+          //PASSING DATAS 
+          function editProvider(id, name, surname, dni, path) {
+               document.querySelector("#editForm #id").value = id;
+               document.querySelector("#editForm #name").value = name;
+               document.querySelector("#editForm #surname").value = surname;
+               document.querySelector("#editForm #dni").value = dni;
+               document.querySelector("#editForm #path").value = path;
+          }
+          //EDIT PROVIDER
+          editForm.addEventListener('submit', (e) => {
+               e.preventDefault();
+               const formData = new FormData(e.currentTarget);
+               const id = formData.get('id');
+               
+               fetch("http://localhost:3000/api/providers/" + id, {
+                         method: "PATCH",
+                         body: formData
+                    })
+                    .then(response => {
+                         return response.json();
+                    })
+                    .then(data => {
+                         getProviders();
+                         console.log(data);
+                         $('#editProvider').modal('hide');
+                    });
+          });
+
+
+          //DELETE PROVIDER
+          function deleteProvider(id) {
+
+               fetch("http://localhost:3000/api/providers/" + id, {
+                         method: "DELETE",
+                    })
+                    .then(response => {
+                         return response.json();
+                    })
+                    .then(data => {
+                         getProviders();
+                         console.log(data);
+                    });
+
+          }
+     </script>
+     <!-- Optional JavaScript -->
+     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+          integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+     </script>
+     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+          integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+     </script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+          integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+     </script>
+</body>
+
+</html>

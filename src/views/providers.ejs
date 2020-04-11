@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+     <!-- Required meta tags -->
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+     <!-- Bootstrap CSS -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+     <title>Providers</title>
+</head>
+
+<body>
+     <div class="container">
+          <div class="container-fluid">
+               <table class="table">
+                    <thead class="thead-dark">
+                         <tr>
+                              <th scope="col">id</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Surname</th>
+                              <th scope="col">DNI</th>
+                              <th scope="col">Photo</th>
+                              <th scope="col">
+                                   <div class="btn-group">
+                                        <a href="/providers" class="btn btn-primary">
+                                             Update All
+                                        </a>
+                                        <button type="button" class="btn btn-success" data-toggle="modal"
+                                             data-target="#addProvider">
+                                             New Provider
+                                        </button>
+                                   </div>
+                              </th>
+                         </tr>
+                    </thead>
+                    <tbody class="tbody">
+                         <% providers.forEach(function(provider, index){ %>
+                              <tr>
+                                   <th scope="row"><%= index + 1 %></th>
+                                   <td><%= provider.name %></td>
+                                   <td><%= provider.surname %></td>
+                                   <td><%= provider.dni %></td>
+                                   <td class="col-2"><img src="<%= provider.url %>" alt=""
+                                                  class="img-fluid">
+                                   </td>
+                                   <td class="text-center" >
+                                         <!-- <div>
+                                              <span class="badge badge-primary"><%= format(provider.created_at)%></span>
+                                         </div> -->
+                                        <div class="btn-group btn-sm">
+                                             <button type="button"
+                                                  onclick="editProvider('<%= provider._id %>', '<%= provider.name %>', '<%= provider.surname %>',
+                                                  '<%= provider.dni %>', '<%= provider.path %>')"
+                                                  class="btn btn-success btn-sm" data-toggle="modal"
+                                                  data-target="#editProvider">
+                                                  Edit
+                                             </button>
+                                             <a href="/providers/<%= provider._id %>/delete"
+                                                  class="btn btn-danger btn-sm">
+                                                  Delete
+                                             </a>
+                                              <a href="/providers/<%= provider._id %>"
+                                                   class="btn btn-dark btn-sm text-white">
+                                                   Details
+                                              </a>
+                                        </div>
+                                   </td>
+                                   
+                              </tr>
+                         <% }) %>
+                    </tbody>
+               </table>
+          </div>
+     </div>
+     <!-- MODAL ADD PROVIDER -->
+     <div class="modal fade" id="addProvider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLabel">New Provider</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                    <form action="/providers" id="addForm" enctype="multipart/form-data" method="POST">
+                         <div class="modal-body">
+                              <div class="form-group">
+                                   <label for="name">Name</label>
+                                   <input type="name" name="name" class="form-control" id="name" aria-describedby="nameHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="surname">SurName</label>
+                                   <input type="surname" name="surname" class="form-control" id="surname"
+                                        aria-describedby="surnameHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="dni">DNI</label>
+                                   <input type="dni" name="dni" class="form-control" id="dni" aria-describedby="dniHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="image">Image</label>
+                                   <input type="file" name="image" class="form-control" id="image"
+                                        aria-describedby="imageHelp">
+                              </div>
+     
+                         </div>
+                         <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Add Provider</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+     <!-- MODAL EDIT PROVIDER -->
+     <div class="modal fade" id="editProvider" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLabel">Edit Provider</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                    <form action="" id="editForm" enctype="multipart/form-data" method="POST">
+                         <div class="modal-body">
+                               <input type="hidden" name="id" class="form-control" id="id" aria-describedby="idHelp">
+                              <div class="form-group">
+                                   <label for="name">Name</label>
+                                   <input type="name" name="name" class="form-control" id="name" aria-describedby="nameHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="surname">SurName</label>
+                                   <input type="surname" name="surname" class="form-control" id="surname"
+                                        aria-describedby="surnameHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="dni">DNI</label>
+                                   <input type="dni" name="dni" class="form-control" id="dni" aria-describedby="dniHelp">
+                              </div>
+                              <div class="form-group">
+                                   <label for="image">image</label>
+                                   <input type="file" name="image" class="form-control" id="image"
+                                        aria-describedby="imageHelp">
+                              </div>
+                              <input type="hidden" name="path" class="form-control" id="path"
+                                   aria-describedby="pathHelp">
+
+                         </div>
+                         <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Edit Provider</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
+
+     <script>
+          //PASSING DATAS
+           function editProvider(id, name, surname, dni, path) {
+               document.querySelector("#editForm #id").value = id;
+               document.querySelector("#editForm #name").value = name;
+               document.querySelector("#editForm #surname").value = surname;
+               document.querySelector("#editForm #dni").value = dni;
+               document.querySelector("#editForm #path").value = path;
+               document.querySelector("#editForm").action = `/providers/${id}`;
+           }
+
+     </script>
+    
+
+     <!-- Optional JavaScript -->
+     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+          integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+          crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+          integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+          crossorigin="anonymous"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+          integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+          crossorigin="anonymous"></script>
+</body>
+
+</html>
